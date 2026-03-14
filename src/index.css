@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.leaflet-container { z-index: 0; }
+
+.leaflet-tile-pane {
+    filter: grayscale(0.2) brightness(0.9) contrast(0.85);
+  }
