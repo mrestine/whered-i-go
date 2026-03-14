@@ -4,7 +4,6 @@ import type { Map, Polyline, Polygon as LPolygon, Marker } from 'leaflet';
 import { fetchBoundaries, getBoundingBoxForRoute } from '../utils/overpass';
 import { findAreasCrossed } from '../utils/routeAnalysis';
 import { AppStatus, HighlightHandlers, Area, RoutePoints, Coordinate } from '../types';
-import { EndIcon, StartIcon } from './MapIcon';
 
 const BOUNDARY_STYLES: Record<
   number,
