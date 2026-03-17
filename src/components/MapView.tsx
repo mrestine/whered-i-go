@@ -172,5 +172,5 @@ export default function MapView({ routePoints, onAreaFound, setAreas, highlightR
     analyse();
   }, [routePoints]);
 
-  return <div ref={mapRef} className="w-full h-full" style={{ minHeight: 400 }} />;
+  return <div ref={mapRef} className="w-full h-full" style={{ minHeight: 300 }} />;
 }

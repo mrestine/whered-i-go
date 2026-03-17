@@ -62,15 +62,7 @@ export default function FileDropzone({ onRouteParsed }: Props) {
   );
 
   return (
-    <div
-      onDrop={(e) => {
-        e.preventDefault();
-        handleFile(e.dataTransfer.files[0]);
-      }}
-      onDragOver={(e) => e.preventDefault()}
-      onClick={() => document.getElementById('file-input')?.click()}
-      className="border-2 border-dashed border-gray-700 rounded-lg p-6 text-center hover:border-blue-500 hover:bg-gray-900 transition-colors cursor-pointer"
-    >
+    <>
       <input
         id="file-input"
         type="file"
@@ -78,9 +70,29 @@ export default function FileDropzone({ onRouteParsed }: Props) {
         className="hidden"
         onChange={(e) => handleFile(e.target.files?.[0])}
       />
-      <div className="text-3xl mb-2">🗺️</div>
-      <p className="text-sm font-medium text-gray-300">Drop a .gpx or .fit file</p>
-      <p className="text-xs text-gray-500 mt-1">or click to browse</p>
-    </div>
+
+      {/* Desktop: dashed drop zone */}
+      <div
+        onDrop={(e) => {
+          e.preventDefault();
+          handleFile(e.dataTransfer.files[0]);
+        }}
+        onDragOver={(e) => e.preventDefault()}
+        onClick={() => document.getElementById('file-input')?.click()}
+        className="hidden md:block border-2 border-dashed border-gray-700 rounded-lg p-6 text-center hover:border-blue-500 hover:bg-gray-900 transition-colors cursor-pointer"
+      >
+        <div className="text-3xl mb-2">🗺️</div>
+        <p className="text-sm font-medium text-gray-300">Drop a .gpx or .fit file</p>
+        <p className="text-xs text-gray-500 mt-1">or click to browse</p>
+      </div>
+
+      {/* Mobile: compact button */}
+      <button
+        onClick={() => document.getElementById('file-input')?.click()}
+        className="md:hidden w-full py-2 px-4 rounded-lg bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-sm font-medium text-white transition-colors"
+      >
+        Upload a .gpx or .fit file
+      </button>
+    </>
   );
 }

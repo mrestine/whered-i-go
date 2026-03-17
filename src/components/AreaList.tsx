@@ -56,6 +56,8 @@ export default function AreaList({ areas, onHover, onHoverEnd }: Props) {
               key={i}
               onMouseEnter={() => onHover(area.name)}
               onMouseLeave={() => onHoverEnd(area.name)}
+              onTouchStart={() => onHover(area.name)}
+              onTouchEnd={() => onHoverEnd(area.name)}
               className="px-4 py-3 border-b border-gray-800 hover:bg-gray-900 transition-colors cursor-default"
             >
               <div className="flex items-start justify-between gap-2">
