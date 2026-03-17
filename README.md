@@ -2,6 +2,9 @@
 
 #### A Simple React App to list all towns a ride goes through given a .gpx or .fit file.
 
+Access it online:
+https://mrestine.github.io/whered-i-go/
+
 Running locally:
 
 ```

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#030712"/>
+  <path d="M16 5C12.13 5 9 8.13 9 12c0 5.25 7 15 7 15s7-9.75 7-15c0-3.87-3.13-7-7-7z" fill="#f97316"/>
+  <!-- ? arc traces the outer border of the pin's circular top, then curls inward -->
+  <path d="M10 8.5 A7 7 0 1 1 22 15.5 C23 15.5 13 20 16 20"
+        fill="none" stroke="#3b52b6" stroke-width="3" stroke-linecap="round"/>
+  <!-- ? dot -->
+  <circle cx="16" cy="27" r="2" fill="#3b52b6"/>
+</svg>
