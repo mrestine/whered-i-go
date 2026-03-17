@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import type { AppStatus, Area } from '../types';
+import { useAppStatus } from '../context/AppStatusContext';
 
 interface Props {
   areas: Area[];
-  status: AppStatus;
-  statusMessage: string;
   onHover: (name: string) => void;
   onHoverEnd: (name: string) => void;
 }
@@ -18,7 +17,8 @@ const COLORS: Record<number, string> = {
 
 const PROCESSING_STATUSES: AppStatus[] = ['parsing', 'fetching', 'processing'];
 
-export default function AreaList({ areas, status, statusMessage, onHover, onHoverEnd }: Props) {
+export default function AreaList({ areas, onHover, onHoverEnd }: Props) {
+  const { status, statusMessage } = useAppStatus();
   const [uniqueOnly, setUniqueOnly] = useState(false);
   const isProcessing = PROCESSING_STATUSES.includes(status);
 

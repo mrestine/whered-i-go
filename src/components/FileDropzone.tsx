@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
-import type { AppStatus, RoutePoints } from '../types';
+import { useAppStatus } from '../context/AppStatusContext';
+import type { RoutePoints } from '../types';
 
 interface Props {
   onRouteParsed: (points: RoutePoints) => void;
-  setStatus: (s: AppStatus) => void;
-  setStatusMessage: (m: string) => void;
 }
 
-export default function FileDropzone({ onRouteParsed, setStatus, setStatusMessage }: Props) {
+export default function FileDropzone({ onRouteParsed }: Props) {
+  const { setStatus, setStatusMessage } = useAppStatus();
   const handleFile = useCallback(
     async (file: File | undefined) => {
       if (!file) return;

@@ -1,9 +1,5 @@
 import { AppStatus } from '../types';
-
-interface Props {
-  status: AppStatus;
-  message: string;
-}
+import { useAppStatus } from '../context/AppStatusContext';
 
 const STATUS_STYLES: Record<AppStatus, string> = {
   idle: 'bg-gray-800 text-gray-400',
@@ -23,7 +19,8 @@ const STATUS_ICONS: Record<AppStatus, string> = {
   error: '✗',
 };
 
-export default function StatusBar({ status, message }: Props) {
+export default function StatusBar() {
+  const { status, statusMessage: message } = useAppStatus();
   const spinning = ['parsing', 'fetching', 'processing'].includes(status);
   return (
     <div

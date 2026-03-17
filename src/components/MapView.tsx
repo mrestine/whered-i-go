@@ -3,7 +3,8 @@ import Leaflet from 'leaflet';
 import type { Map, Polyline, Polygon as LPolygon, Marker } from 'leaflet';
 import { fetchBoundaries, getBoundingBoxForRoute } from '../utils/overpass';
 import { findAreasCrossed } from '../utils/routeAnalysis';
-import { AppStatus, HighlightHandlers, Area, RoutePoints, Coordinate } from '../types';
+import { useAppStatus } from '../context/AppStatusContext';
+import { HighlightHandlers, Area, RoutePoints, Coordinate } from '../types';
 
 const BOUNDARY_STYLES: Record<
   number,
@@ -20,20 +21,11 @@ interface Props {
   areas: Area[];
   setAreas: (areas: Area[]) => void;
   onAreaFound: (area: Area) => void;
-  status: AppStatus;
-  setStatus: (status: AppStatus) => void;
-  setStatusMessage: (msg: string) => void;
   highlightRef: React.MutableRefObject<HighlightHandlers | null>;
 }
 
-export default function MapView({
-  routePoints,
-  onAreaFound,
-  setAreas,
-  setStatus,
-  setStatusMessage,
-  highlightRef,
-}: Props) {
+export default function MapView({ routePoints, onAreaFound, setAreas, highlightRef }: Props) {
+  const { setStatus, setStatusMessage } = useAppStatus();
   const mapRef = useRef<HTMLDivElement>(null);
   const leafletMap = useRef<Map | null>(null);
   const layersRef = useRef<(Polyline | LPolygon | Marker)[]>([]);
