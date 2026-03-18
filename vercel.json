@@ -1,8 +1,6 @@
 {
-  "builds": [
-    { "src": "api/**/*.go", "use": "@vercel/go" },
-    { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
-  ],
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "rewrites": [
     { "source": "/api/rides/:id", "destination": "/api/rides?id=:id" },
     { "source": "/((?!api/|assets/).*)", "destination": "/index.html" }
