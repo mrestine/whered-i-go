@@ -7,7 +7,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "start": "webpack serve --mode development --open",
-    "api": "CGO_ENABLED=0 vercel dev --local-config vercel.local.json --listen 3001",
+    "api": "CGO_ENABLED=0 npx vercel@latest dev --local-config vercel.local.json --listen 3001",
     "build": "webpack --mode production && cp -r public/assets dist/ && cp public/favicon.svg dist/",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit"
@@ -32,7 +32,6 @@
     "style-loader": "^3.3.4",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.0",
-    "vercel": "^50.33.0",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4"
