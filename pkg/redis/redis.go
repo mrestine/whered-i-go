@@ -12,11 +12,11 @@ import (
 )
 
 func baseURL() string {
-	return os.Getenv("REDIS_URL")
+	return os.Getenv("STORAGE_KV_REST_API_URL")
 }
 
 func token() string {
-	return os.Getenv("REDIS_TOKEN")
+	return os.Getenv("STORAGE_KV_REST_API_TOKEN")
 }
 
 // do sends a single Redis command as a JSON array body to the REST endpoint.
