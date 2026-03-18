@@ -117,7 +117,7 @@ export default function RecentRides({ onRouteParsed }: Props) {
               </li>
             ))}
           </ul>
-        ) : (
+        ) : rides.length ? (
           <ul className="space-y-1 mt-2 md:max-h-64 md:overflow-y-auto">
             {rides.map((ride) => (
               <li key={ride.activityId}>
@@ -129,7 +129,7 @@ export default function RecentRides({ onRouteParsed }: Props) {
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-sm text-gray-100 truncate group-hover:text-white">
                       {loadingId === ride.activityId ? (
-                        <span className="text-gray-400">Loading…</span>
+                        <span className="text-gray-400">Loading...</span>
                       ) : (
                         ride.name
                       )}
@@ -143,7 +143,7 @@ export default function RecentRides({ onRouteParsed }: Props) {
               </li>
             ))}
           </ul>
-        )}
+        ) : null}
       </div>
     </div>
   );

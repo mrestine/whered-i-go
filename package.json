@@ -7,6 +7,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "start": "webpack serve --mode development --open",
+    "api": "CGO_ENABLED=0 vercel dev --local-config vercel.local.json --listen 3001",
     "build": "webpack --mode production && cp -r public/assets dist/ && cp public/favicon.svg dist/",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit"

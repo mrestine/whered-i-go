@@ -32,7 +32,7 @@ docker run -d --name wdig-redis-http -p 8079:80 \
 ### starting vercel
 
 ```
-CGO_ENABLED=0 npx vercel dev --listen 3001
+npm run api
 ```
 
 ### starting the frontend in HMR mode
