@@ -50,6 +50,19 @@ export interface OverpassMember {
 
 export type AppStatus = 'idle' | 'parsing' | 'fetching' | 'processing' | 'done' | 'error';
 
+export interface User {
+  stravaAthleteId: number;
+  athleteName: string;
+  avatarUrl?: string;
+}
+
+export interface StoredRide {
+  activityId: number;
+  name: string;
+  startDate: string;
+  distanceMeters: number;
+}
+
 export interface HighlightHandlers {
   highlight: (name: string) => void;
   unhighlight: (name: string) => void;

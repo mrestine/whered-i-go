@@ -6,7 +6,7 @@ module.exports = (env, argv) => ({
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.[contenthash].js',
-    publicPath: argv.mode === 'production' ? './' : '/',
+    publicPath: '/',
     clean: true,
   },
   resolve: {
@@ -35,5 +35,12 @@ module.exports = (env, argv) => ({
     hot: true,
     port: 3000,
     historyApiFallback: true,
+    proxy: [
+      {
+        context: ['/api'],
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+    ],
   },
 });

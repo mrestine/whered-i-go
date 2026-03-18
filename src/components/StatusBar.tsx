@@ -27,14 +27,7 @@ export default function StatusBar() {
       className={`absolute bottom-0 left-0 right-0 px-4 py-2 text-xs flex items-center gap-2 ${STATUS_STYLES[status]}`}
     >
       <span className={spinning ? 'animate-spin inline-block' : ''}>{STATUS_ICONS[status]}</span>
-      <span>
-        {message || (
-          <>
-            <span className="hidden md:inline">Drop</span>
-            <span className="md:hidden">Upload</span> a file to begin
-          </>
-        )}
-      </span>
+      <span>{message || 'Choose a ride to begin'}</span>
     </div>
   );
 }
