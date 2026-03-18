@@ -7,7 +7,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "start": "webpack serve --mode development --open",
-    "api": "CGO_ENABLED=0 npx vercel@latest dev --local-config vercel.local.json --listen 3001",
+    "api": "CGO_ENABLED=0 vercel dev --local-config vercel.local.json --listen 3001",
     "build": "webpack --mode production && cp -r public/assets dist/ && cp public/favicon.svg dist/",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit"
@@ -37,9 +37,12 @@
     "webpack-dev-server": "^5.0.4"
   },
   "dependencies": {
-    "@turf/turf": "^6.5.0",
+    "@turf/along": "^6.5.0",
+    "@turf/boolean-point-in-polygon": "^6.5.0",
+    "@turf/helpers": "^6.5.0",
+    "@turf/length": "^6.5.0",
     "fit-file-parser-typescript": "^1.20.1",
-    "gpxparser": "^3.0.8",
+    "gpxparser": "3.0.0",
     "leaflet": "^1.9.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

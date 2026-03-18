@@ -1,4 +1,9 @@
-import * as turf from '@turf/turf';
+import { lineString, polygon } from '@turf/helpers';
+import length from '@turf/length';
+import along from '@turf/along';
+import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
+
+const turf = { lineString, polygon, length, along, booleanPointInPolygon };
 import { Area, Ring, Rings, RoutePoints, OverpassResponse } from '../types';
 
 const STEP_METERS = 100;
