@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Leaflet from 'leaflet';
 import type { Map, Polyline, Polygon as LPolygon, Marker } from 'leaflet';
 import { fetchBoundaries, getBoundingBoxForRoute } from '../utils/overpass';
@@ -25,7 +25,8 @@ interface Props {
 }
 
 export default function MapView({ routePoints, onAreaFound, setAreas, highlightRef }: Props) {
-  const { setStatus, setStatusMessage } = useAppStatus();
+  const { status, statusMessage, setStatus, setStatusMessage } = useAppStatus();
+  const [retryCount, setRetryCount] = useState(0);
   const mapRef = useRef<HTMLDivElement>(null);
   const leafletMap = useRef<Map | null>(null);
   const layersRef = useRef<(Polyline | LPolygon | Marker)[]>([]);
@@ -170,7 +171,25 @@ export default function MapView({ routePoints, onAreaFound, setAreas, highlightR
     }
 
     analyse();
-  }, [routePoints]);
+  }, [routePoints, retryCount]);
 
-  return <div ref={mapRef} className="w-full h-full" style={{ minHeight: 300 }} />;
+  return (
+    <div className="w-full h-full relative" style={{ minHeight: 300 }}>
+      <div ref={mapRef} className="w-full h-full" />
+      {status === 'error' && routePoints && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-[1000]">
+          <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 text-center max-w-sm mx-4 shadow-2xl">
+            <p className="text-red-400 font-semibold mb-1">Analysis failed</p>
+            <p className="text-gray-400 text-sm mb-5">{statusMessage}</p>
+            <button
+              onClick={() => setRetryCount((c) => c + 1)}
+              className="px-5 py-2 bg-orange-600 hover:bg-orange-500 active:bg-orange-700 text-white text-sm font-semibold rounded-lg transition-colors"
+            >
+              Try again
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }

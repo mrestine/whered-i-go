@@ -55,12 +55,23 @@ export async function fetchBoundaries(boundingBox: BoundingBox): Promise<Overpas
     out geom;
   `;
 
-  const res = await fetch(
-    `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`,
-  );
-  if (!res.ok) {
-    throw new Error(`Overpass request failed: ${res.status}`);
+  const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
+  const delays = [1000, 3000];
+
+  let lastStatus = 0;
+  for (let attempt = 0; attempt <= delays.length; attempt++) {
+    if (attempt > 0) {
+      await new Promise((resolve) => setTimeout(resolve, delays[attempt - 1]));
+    }
+    const res = await fetch(url);
+    if (res.ok) {
+      return res.json() as Promise<OverpassResponse>;
+    }
+    lastStatus = res.status;
+    if (res.status < 500) {
+      break;
+    }
   }
 
-  return res.json() as Promise<OverpassResponse>;
+  throw new Error(`Overpass request failed: ${lastStatus}`);
 }
