@@ -52,19 +52,19 @@ func handleRideList(w http.ResponseWriter, _ *http.Request, user *types.User) {
 	ridesKey := fmt.Sprintf("wdig:rides:%d", user.StravaAthleteID)
 	actIDs, err := rdb.ZRevRange(ridesKey, 0, 4)
 	if err != nil {
-		json.NewEncoder(w).Encode(map[string]interface{}{"rides": []types.ActivityMeta{}})
+		json.NewEncoder(w).Encode(map[string]interface{}{"rides": []types.ActivityMeta{}, "debug_zrevrange_err": err.Error()})
 		return
 	}
 
 	if len(actIDs) == 0 {
 		// No rides in Redis yet — backfill from Strava.
 		fetched, ferr := strava.FetchRecentOutdoorActivities(user.StravaAthleteID, 5)
-		log.Printf("backfill: athleteID=%d fetched=%d err=%v", user.StravaAthleteID, len(fetched), ferr)
-		for i, r := range fetched {
-			log.Printf("backfill[%d]: id=%d name=%q date=%s", i, r.ActivityID, r.Name, r.StartDate)
-		}
 		if ferr != nil || len(fetched) == 0 {
-			json.NewEncoder(w).Encode(map[string]interface{}{"rides": []types.ActivityMeta{}})
+			errStr := ""
+			if ferr != nil {
+				errStr = ferr.Error()
+			}
+			json.NewEncoder(w).Encode(map[string]interface{}{"rides": []types.ActivityMeta{}, "debug_error": errStr})
 			return
 		}
 		for _, meta := range fetched {
@@ -83,7 +83,7 @@ func handleRideList(w http.ResponseWriter, _ *http.Request, user *types.User) {
 		}
 		_ = rdb.Expire(ridesKey, activityTTL)
 
-		json.NewEncoder(w).Encode(map[string]interface{}{"rides": fetched})
+		json.NewEncoder(w).Encode(map[string]interface{}{"rides": fetched, "debug_backfill_count": len(fetched)})
 		return
 	}
 
@@ -114,7 +114,7 @@ func handleRideList(w http.ResponseWriter, _ *http.Request, user *types.User) {
 		rides = append(rides, meta)
 	}
 
-	json.NewEncoder(w).Encode(map[string]interface{}{"rides": rides})
+	json.NewEncoder(w).Encode(map[string]interface{}{"rides": rides, "debug_from_redis": actIDs})
 }
 
 // handleSingleRide returns the GPS stream for a single ride.
