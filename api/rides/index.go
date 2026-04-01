@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -58,6 +59,10 @@ func handleRideList(w http.ResponseWriter, _ *http.Request, user *types.User) {
 	if len(actIDs) == 0 {
 		// No rides in Redis yet — backfill from Strava.
 		fetched, ferr := strava.FetchRecentOutdoorActivities(user.StravaAthleteID, 5)
+		log.Printf("backfill: athleteID=%d fetched=%d err=%v", user.StravaAthleteID, len(fetched), ferr)
+		for i, r := range fetched {
+			log.Printf("backfill[%d]: id=%d name=%q date=%s", i, r.ActivityID, r.Name, r.StartDate)
+		}
 		if ferr != nil || len(fetched) == 0 {
 			json.NewEncoder(w).Encode(map[string]interface{}{"rides": []types.ActivityMeta{}})
 			return
