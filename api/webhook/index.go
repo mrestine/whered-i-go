@@ -56,6 +56,51 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Handle update events (e.g. rename, crop).
+	if event.AspectType == "update" && event.ObjectType == "activity" {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]bool{"received": true})
+
+		metaKey := fmt.Sprintf("wdig:activity:%d:meta", event.ObjectID)
+		streamKey := fmt.Sprintf("wdig:activity:%d:stream", event.ObjectID)
+		ridesKey := fmt.Sprintf("wdig:rides:%d", event.OwnerID)
+
+		meta, err := strava.FetchActivityMeta(event.OwnerID, event.ObjectID)
+		if err != nil || meta == nil {
+			return
+		}
+
+		// If the activity was updated to virtual/trainer, remove it.
+		if meta.SportType == "VirtualRide" || meta.Trainer {
+			_ = rdb.Del(metaKey)
+			_ = rdb.Del(streamKey)
+			_ = rdb.ZRem(ridesKey, fmt.Sprintf("%d", event.ObjectID))
+			return
+		}
+
+		// Re-fetch stream in case the activity was cropped.
+		stream, err := strava.FetchActivityStream(event.OwnerID, event.ObjectID)
+		if err != nil || len(stream) == 0 {
+			return
+		}
+
+		streamJSON, err := json.Marshal(stream)
+		if err != nil {
+			return
+		}
+		if err := rdb.Set(streamKey, string(streamJSON), activityTTL); err != nil {
+			return
+		}
+
+		metaJSON, err := json.Marshal(meta)
+		if err != nil {
+			return
+		}
+		_ = rdb.Set(metaKey, string(metaJSON), activityTTL)
+		return
+	}
+
 	// Only handle activity create events.
 	if event.ObjectType != "activity" || event.AspectType != "create" {
 		w.WriteHeader(http.StatusOK)
