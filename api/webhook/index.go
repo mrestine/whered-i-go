@@ -100,6 +100,14 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		_ = rdb.Set(metaKey, string(metaJSON), activityTTL)
+
+		// Re-add to sorted set in case it was removed by a prior delete event.
+		startTime, _ := time.Parse("2006-01-02T15:04:05", meta.StartDate)
+		score := float64(startTime.UnixMilli())
+		_ = rdb.ZAdd(ridesKey, score, fmt.Sprintf("%d", event.ObjectID))
+		_ = rdb.Expire(ridesKey, activityTTL)
+		_ = rdb.ZRemRangeByRank(ridesKey, 0, -6)
+
 		w.WriteHeader(http.StatusOK)
 		return
 	}
