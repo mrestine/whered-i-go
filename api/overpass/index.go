@@ -4,6 +4,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -18,10 +19,16 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := http.PostForm(
-		"https://overpass-api.de/api/interpreter",
-		url.Values{"data": {string(query)}},
-	)
+	body := strings.NewReader("data=" + url.QueryEscape(string(query)))
+	req, err := http.NewRequestWithContext(r.Context(), http.MethodPost, "https://overpass-api.de/api/interpreter", body)
+	if err != nil {
+		http.Error(w, "failed to build upstream request", http.StatusInternalServerError)
+		return
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("User-Agent", "whered-i-go/1.0 (https://github.com/mrestine/whered-i-go)")
+
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		http.Error(w, "upstream request failed", http.StatusBadGateway)
 		return
