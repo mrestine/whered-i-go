@@ -1,3 +1,3 @@
 module github.com/mrestine/whered-i-go
 
-go 1.22
+go 1.24
