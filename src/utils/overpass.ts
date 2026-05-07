@@ -55,7 +55,6 @@ export async function fetchBoundaries(boundingBox: BoundingBox): Promise<Overpas
     out geom;
   `;
 
-  const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
   const delays = [1000, 3000];
 
   let lastStatus = 0;
@@ -63,7 +62,11 @@ export async function fetchBoundaries(boundingBox: BoundingBox): Promise<Overpas
     if (attempt > 0) {
       await new Promise((resolve) => setTimeout(resolve, delays[attempt - 1]));
     }
-    const res = await fetch(url);
+    const res = await fetch('/api/overpass', {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: query,
+    });
     if (res.ok) {
       return res.json() as Promise<OverpassResponse>;
     }
